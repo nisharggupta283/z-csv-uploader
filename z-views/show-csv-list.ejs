@@ -1,68 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/tables-style.css" />
+    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <link rel="stylesheet" href="/autocomplete.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-  <link rel="stylesheet" href="/tables-style.css" />
-  <link rel="stylesheet" href="/bootstrap.min.css" />
-  <script src="/bootstrap.min.js"></script>
-  <script src="/jquery.js"></script>
-  <script src="/myJs.js"></script>
-  <script>
-    var id='<%=id%>';
-  </script>
-</head>
+    <script src="/bootstrap.min.js"></script>
+    <script src="/myJs.js"></script>
+    <script src="/autocomplete.js"></script>
+    <script src="/autocomplete-ui.js"></script>
+    <script>
+      var id = "<%=id%>";
+    </script>
+  </head>
 
-<body>
-  <div class="text-center">
-    <div class="row align-items-center">
-      <div class="col">
-        <table class="styled-table" id="to-append">
-          <thead>
-            <tr>
-              <%for(x of data[0]){%>
-                <th>
-                  <%=x%>
-                </th>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-4 my-5" style="width: 14.333333%">
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            id="select-filter"
+          >
+            <option selected></option>
+            <% let option_value=0; for(x of data[0]){%>
+            <option value="<%=option_value++%>"><%=x%></option>
+            <%}%>
+          </select>
+        </div>
+        <div class="col-4 my-5" style="width: 28.333333%">
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            id="filter-input"
+            placeholder="Filter Record"
+            aria-label="Search"
+            onkeyup="callAutoFillMethod(this);"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="text-center">
+      <div class="row align-items-center">
+        <div class="col">
+          <table class="styled-table" id="to-append">
+            <thead>
+              <tr>
+                <%for(x of data[0]){%>
+                <th><%=x%></th>
                 <%}%>
-            </tr>
-          </thead>
-          <tbody id="to-delete">
-            <%var count='' ; for(let i=1;i<data.length;i++){ count=count=='active-row' ?'':'active-row'; %>
+              </tr>
+            </thead>
+            <tbody id="to-delete">
+              <%var count='' ; for(let i=1;i<data.length;i++){
+              count=count=='active-row' ?'':'active-row'; %>
               <tr class="<%=count%>">
                 <%for(x of data[i]){%>
-                  <td>
-                    <%=x%>
-                  </td>
-                  <%}%>
+                <td><%=x%></td>
+                <%}%>
               </tr>
               <%}%>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container text-center">
-    <div class="row">
-      <div class="col-md-4"></div>
-      <div class="col-md-4 offset-md-4">
-        <nav aria-label="...">
-          <ul class="pagination">
-            <li class="page-item disabled" id="previous">
-              <a class="page-link" href="javascript:void(0)" tabindex="-1" onclick="callPrevPage()">Previous</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="javascript:void(0)" onclick="callNextPage()">Next</a>
-            </li>
-            <li class="page-item disabled">
-              <a class="page-link" href="javascript:void(0)" id="page-no"></a>
-            </li>
-          </ul>
-        </nav>
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 offset-md-4">
+          <nav aria-label="...">
+            <ul class="pagination">
+              <li class="page-item disabled" id="previous">
+                <a
+                  class="page-link"
+                  href="javascript:void(0)"
+                  tabindex="-1"
+                  onclick="callPrevPage()"
+                  >Previous</a
+                >
+              </li>
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="javascript:void(0)"
+                  onclick="callNextPage()"
+                  >Next</a
+                >
+              </li>
+              <li class="page-item disabled">
+                <a class="page-link" href="javascript:void(0)" id="page-no"></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
+  <script>
+    $("#to-append tr td").click(function () {
+      //Reset
+      $("#to-append td").removeClass("highlight");
+      //Add highlight class to new column
+      var index = $(this).index();
+      $("#to-append tr").each(function (i, tr) {
+        $(tr).find("td").eq(index).addClass("highlight");
+      });
+    });
+  </script>
 </html>

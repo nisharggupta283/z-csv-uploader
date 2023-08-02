@@ -43,4 +43,5 @@ router.get('/see', csvController.getAllCSV);
 
 router.get('/csvdata',csvController.parseCSVandGetData);
 
+router.all('/filter',csvController.filterData);
 module.exports = router;
